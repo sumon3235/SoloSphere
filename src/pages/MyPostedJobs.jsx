@@ -13,7 +13,7 @@ const MyPostedJobs = () => {
     fetchAllTheJobs();
   }, [user]);
 
-  // Delet a job funtion
+  // get Data from database
   const fetchAllTheJobs = async () => {
     const { data } = await axios.get(
       `${import.meta.env.VITE_APIURL}/jobs/${user.email}`,
