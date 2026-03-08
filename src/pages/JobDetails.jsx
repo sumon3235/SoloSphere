@@ -77,7 +77,7 @@ const JobDetails = () => {
         return toast.error('Not Valid')
       }
 
-    const newData = {price, email, comment, jobId, deadline:startDate, title, category, status: 'pending'};
+    const newData = {price, email, comment, jobId, deadline:startDate, title, category, status: 'pending', buyer:buyer?.email};
     
      try {
       const { data } = await axios.post(

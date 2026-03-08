@@ -12,12 +12,28 @@ const MyBids = () => {
       `${import.meta.env.VITE_APIURL}/bids/${user?.email}`,
     );
     setBids(data);
-   console.log(bids)
   };
 
-    useEffect(() => {
+  useEffect(() => {
     fetchAllTheBids();
   }, [user]);
+
+  // handle bid request funtion
+  const handleBidRequests = async (id, prevStatus, status) => {
+    if (prevStatus !== "In Progress") return console.log("Allowed");
+
+    try {
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_APIURL}/bid-status-update/${id}`,
+        { status },
+      );
+      console.log(data);
+      fetchAllTheBids()
+    } catch (err) {
+      console.log(err);
+    }
+    console.table({ id, prevStatus, status });
+  };
 
   return (
     <section className="container px-4 mx-auto my-12">
@@ -81,9 +97,13 @@ const MyBids = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 ">
-                  {
-                    bids.map(bid => <BidsDataTable key={bid._id} bid={bid}></BidsDataTable>)
-                  }
+                  {bids.map((bid) => (
+                    <BidsDataTable
+                      key={bid._id}
+                      bid={bid}
+                      handleBidRequests={handleBidRequests}
+                    ></BidsDataTable>
+                  ))}
                 </tbody>
               </table>
             </div>
