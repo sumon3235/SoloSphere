@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import axios from "axios";
 import BidRequestTableRaw from "../components/BidRequestTableRaw";
+import toast from "react-hot-toast";
 
 const BidRequests = () => {
   const [bids, setBids] = useState([]);
@@ -19,13 +20,15 @@ const BidRequests = () => {
   }, [user]);
 
   // handle bid request funtion
-  const handleBidRequests = async (id, prevStatus, status) => {
+  const handleBidRequests = async (id, prevStatus, status, jobId) => {
     if(prevStatus === status || prevStatus === "Completed") return console.log('not allow');
 
     try {
-      const {data} = await axios.patch(`${import.meta.env.VITE_APIURL}/bid-status-update/${id}`, {status})
-      console.log(data);
-      fetchAllTheBids();
+      const {data} = await axios.patch(`${import.meta.env.VITE_APIURL}/bid-status-update/${id}`, {status, jobId})
+      if (data.modifiedCount > 0) {
+      toast.success("Hired successfully! Job is now closed for others.");
+      fetchAllTheBids(); // ডাটা আবার লোড করা
+    }
     }catch(err) {
       console.log(err)
     }

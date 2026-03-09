@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 const BidRequestTableRaw = ({ bid, handleBidRequests }) => {
 
-   const {title, price, deadline, category, status, email, _id} = bid || {};
+   const {title, price, deadline, category, status, email, _id, jobId} = bid || {};
+   console.log(jobId)
 
   return (
     <tr>
@@ -37,7 +38,7 @@ const BidRequestTableRaw = ({ bid, handleBidRequests }) => {
       <td className="px-4 py-4 text-sm whitespace-nowrap">
         <div className="flex items-center gap-x-6">
             {/* Accept btn */}
-          <button onClick={ () => handleBidRequests(_id, status, 'In Progress')} className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
+          <button onClick={ () => handleBidRequests(_id, status, 'In Progress', jobId)} disabled={status === "In Progress" || status === "Completed"} className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -55,7 +56,7 @@ const BidRequestTableRaw = ({ bid, handleBidRequests }) => {
           </button>
 
             {/* rejected btn */}
-          <button onClick={ () => handleBidRequests(_id, status, 'Rejected')} className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
+          <button onClick={ () => handleBidRequests(_id, status, 'Rejected')} disabled={status === "Rejected" || status === "Completed"} className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
