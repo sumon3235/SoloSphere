@@ -21,19 +21,27 @@ const BidRequests = () => {
 
   // handle bid request funtion
   const handleBidRequests = async (id, prevStatus, status, jobId) => {
-    if(prevStatus === status || prevStatus === "Completed") return console.log('not allow');
+    if (prevStatus === status || prevStatus === "Completed")
+      return console.log("not allow");
 
     try {
-      const {data} = await axios.patch(`${import.meta.env.VITE_APIURL}/bid-status-update/${id}`, {status, jobId})
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_APIURL}/bid-status-update/${id}`,
+        { status, jobId },
+      );
       if (data.modifiedCount > 0) {
-      toast.success("Hired successfully! Job is now closed for others.");
-      fetchAllTheBids(); // ডাটা আবার লোড করা
+        if (status === "In Progress") {
+          toast.success("Hired successfully! Job is now closed for others.");
+        } else if (status === "Rejected") {
+          toast.error("Bid Rejected!");
+        }
+        fetchAllTheBids();
+      }
+    } catch (err) {
+      toast.error(err.message);
     }
-    }catch(err) {
-      console.log(err)
-    }
-    console.table({id, prevStatus, status});
-  }
+    console.table({ id, prevStatus, status });
+  };
 
   return (
     <section className="container px-4 mx-auto my-12">
@@ -105,9 +113,13 @@ const BidRequests = () => {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200 ">
-                  {
-                    bids.map(bid => <BidRequestTableRaw key={bid._id} bid={bid} handleBidRequests={handleBidRequests}></BidRequestTableRaw>)
-                  }
+                  {bids.map((bid) => (
+                    <BidRequestTableRaw
+                      key={bid._id}
+                      bid={bid}
+                      handleBidRequests={handleBidRequests}
+                    ></BidRequestTableRaw>
+                  ))}
                 </tbody>
               </table>
             </div>

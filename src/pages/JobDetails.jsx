@@ -104,7 +104,7 @@ const JobDetails = () => {
 
   <div className="flex flex-col md:flex-row justify-around gap-5 items-center min-h-[calc(100vh-306px)] md:max-w-screen-xl mx-auto ">
     
-    {/* ১. Job Details অংশ (এটা সব সময় দেখা যাবে) */}
+    {/* ১. Job Details section */}
     <div className="flex-1 px-4 py-7 bg-white rounded-md shadow-md md:min-h-[350px]">
       <div className="flex items-center justify-between">
         {deadline && (
@@ -136,10 +136,10 @@ const JobDetails = () => {
       </div>
     </div>
 
-    {/* ২. Place A Bid Form অংশ (এখানেই আসল খেলা) */}
+    {/* ২. Place A Bid Form  */}
     <section className="p-6 w-full bg-white rounded-md shadow-md flex-1 md:min-h-[350px]">
       
-      {/* যদি জব ক্লোজড হয় তবে মেসেজ দেখাও, নাহলে ফর্ম দেখাও */}
+      {/* condition a rendaring*/}
       {job.status === "Closed" ? (
         <div className="flex flex-col items-center justify-center h-full">
           <div className="bg-red-100 p-6 text-red-600 font-bold rounded-lg text-center border border-red-200">
