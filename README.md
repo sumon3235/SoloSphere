@@ -3,8 +3,7 @@
 **SoloSphere** is a dynamic full-stack application designed to connect job seekers with employers. Users can browse various job categories, post new job opportunities, and manage their listings with ease.
 
 ## 🚀 Live Demo
-[job-siker.web.app]
-`https://solosphere-your-link.web.app`
+[Live Site Link](https://job-siker.web.app/)
 
 ## ✨ Key Features
 * **User Authentication:** Secure login and registration using Firebase (Email/Password & Google).
