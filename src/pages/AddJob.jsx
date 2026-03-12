@@ -5,11 +5,28 @@ import { AuthContext } from "../providers/AuthProvider";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const AddJob = () => {
   const [startDate, setStartDate] = useState(new Date());
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const {mutateAsync, isPending} = useMutation({
+    mutationFn: async (newData) => {
+     const {data} = await axios.post(`${import.meta.env.VITE_APIURL}/addJob`, newData);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success('Job Added Successfully!')
+      navigate('/my-posted-jobs')
+      queryClient.invalidateQueries({ queryKey: ['jobs'] })
+    },
+    onError: (err) => {
+      toast.error(err.message)
+    }
+  });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,21 +48,7 @@ const AddJob = () => {
       max_price,
       bid_count: 0,
     };
-
-    try {
-      const { data } = await axios.post(
-        `${import.meta.env.VITE_APIURL}/addJob`,
-        newData,
-      );
-
-      if (data.insertedId) {
-        toast.success("Job Added Successfully");
-        form.reset();
-        navigate("/my-posted-jobs");
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || error.message);
-    }
+    await mutateAsync(newData);
   };
 
   return (
@@ -150,7 +153,7 @@ const AddJob = () => {
           </div>
           <div className="flex justify-end mt-6">
             <button className="disabled:cursor-not-allowed px-8 py-2.5 leading-5 text-white transition-colors duration-300 transhtmlForm bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
-              Save
+             {isPending ? 'Saving...' : 'Add Job'}
             </button>
           </div>
         </form>
