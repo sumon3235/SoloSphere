@@ -2,15 +2,15 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../providers/AuthProvider";
 import axios from "axios";
 import BidsDataTable from "./BidsDataTable";
+import useAxiosSecure from "../hooks/AxiosSecure";
 
 const MyBids = () => {
+  const axiosSecure = useAxiosSecure();
   const [bids, setBids] = useState([]);
   const { user } = useContext(AuthContext);
 
   const fetchAllTheBids = async () => {
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_APIURL}/bids/${user?.email}`,
-    );
+    const { data } = await axiosSecure.get(`/bids/${user?.email}`);
     setBids(data);
   };
 
@@ -28,7 +28,7 @@ const MyBids = () => {
         { status },
       );
       console.log(data);
-      fetchAllTheBids()
+      fetchAllTheBids();
     } catch (err) {
       console.log(err);
     }
